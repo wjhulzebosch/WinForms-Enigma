@@ -192,13 +192,15 @@ namespace Enigma
         private void btnCopyOutput_Click(object sender, EventArgs e)
         {
             string currentOutput = txbOutput.Text;
-            Clipboard.SetText(currentOutput);
+            if(currentOutput.Length > 0)
+                Clipboard.SetText(currentOutput);
         }
 
         private void btnCopyInput_Click(object sender, EventArgs e)
         {
             string currentInput = txbInput.Text;
-            Clipboard.SetText(currentInput);
+            if (currentInput.Length > 0)
+                Clipboard.SetText(currentInput);
         }
 
         private void btnPasteInput_Click(object sender, EventArgs e)
