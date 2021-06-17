@@ -37,7 +37,7 @@ namespace EnigmaForm
             List<String> testOutputList = new List<string>();
             for (int rotor = 0; rotor < 2; rotor++)
             {
-                for (int input = 0; input < 6; input++)
+                for (int input = 0; input < rotor0.GetConnectionCount(); input++)
                 {
                     rotor0.SetRotorPosition(rotor);
                     char output = EnigmaEncrypt( NumberToLetter(input) );
@@ -103,7 +103,7 @@ namespace EnigmaForm
             Debug.WriteLine($"rotor 1:        {charNumber} ({NumberToLetter(charNumber)}) becomes {encryptedNumber} ({NumberToLetter(encryptedNumber)}).");
             //encryptedNumber = rotor1.KeyStroke(encryptedNumber);
             //encryptedNumber = rotor2.KeyStroke(encryptedNumber);
-            int mirroredNumber = MirrorInput(encryptedNumber);
+            int mirroredNumber = MirrorInput(encryptedNumber, rotor0.GetConnectionCount());
             
 
             Debug.WriteLine("Mirroring:      " + encryptedNumber + " (" + NumberToLetter(encryptedNumber) + ") becomes " + mirroredNumber + " (" + NumberToLetter(mirroredNumber) + ").");
@@ -194,9 +194,9 @@ namespace EnigmaForm
         //    return mirrorConnections[input];
         //} 
 
-        static int MirrorInput(int input)
+        static int MirrorInput(int input, int numRotorConnections)
         {
-            int reflectorCount = 6;
+            int reflectorCount = numRotorConnections;
             int mirrored = (reflectorCount - 1) - input;
             return mirrored;
         }
@@ -207,6 +207,7 @@ namespace EnigmaForm
         private int currentRotorPosition;
         private int[] rotorConnections = { 2, -1, 3, 1, 3, -2 };
         private int[] rotorConnectionsReverse = {1, -3, -2, 2, -1, -3};
+        private int numRotorConnections;
 
         Label myLabel;
         int rotorNumber;
@@ -220,13 +221,14 @@ namespace EnigmaForm
         {
             this.rotorNumber = rotorNumber;
             setupRotorButtons(form, rotorNumber);
+            numRotorConnections = rotorConnections.Length;
         }
 
         public override string ToString()
         {
             string tempString= "";
             string toString = "";
-            for(int i = 0; i < rotorConnections.Length; i++)
+            for(int i = 0; i < numRotorConnections; i++)
             {
                 tempString = $"\n{i}: {rotorConnections[i]}";
                 if (tempString.Length == 5)
@@ -253,15 +255,15 @@ namespace EnigmaForm
             {
                 IncreaseRotorPosition();
                 Debug.WriteLine($"Key: {key} + connection {rotorConnections[currentRotorPosition]}");
-                retVal = (key + rotorConnections[currentRotorPosition]) % 6;
+                retVal = (key + rotorConnections[currentRotorPosition]) % numRotorConnections;
             }
             else
             {
-                retVal = (key + rotorConnectionsReverse[currentRotorPosition]) % 6;
+                retVal = (key + rotorConnectionsReverse[currentRotorPosition]) % numRotorConnections;
             }
 
-            retVal += 6;
-            retVal = retVal % 6;
+            retVal += numRotorConnections;
+            retVal = retVal % numRotorConnections;
             return retVal;
         }
 
@@ -273,9 +275,9 @@ namespace EnigmaForm
         public void IncreaseRotorPosition()
         {
             currentRotorPosition++;
-            currentRotorPosition = currentRotorPosition % 6;
+            currentRotorPosition = currentRotorPosition % numRotorConnections;
 
-            Debug.WriteLine(this.ToString());
+            Debug.WriteLine(this);
         }
 
         private void setupRotorButtons (Form form, int rotorNumber)
@@ -338,13 +340,18 @@ namespace EnigmaForm
 
         public void SetRotorPosition(int position)
         {
-            currentRotorPosition = position % 6;
+            currentRotorPosition = position % numRotorConnections;
             UpdateRotorPositionLabel();
         }
 
         public int GetRotorPosition()
         {
             return currentRotorPosition;
+        }
+
+        public int GetConnectionCount()
+        {
+            return numRotorConnections;
         }
     }
 }
