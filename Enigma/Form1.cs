@@ -222,16 +222,25 @@ namespace EnigmaForm
             setupRotorButtons(form, rotorNumber);
         }
 
-        public string ToString()
+        public override string ToString()
         {
+            string tempString= "";
             string toString = "";
             for(int i = 0; i < rotorConnections.Length; i++)
             {
-                toString += $"\n{i}: {rotorConnections[i] }";
-                if(i == currentRotorPosition )
+                tempString = $"\n{i}: {rotorConnections[i]}";
+                if (tempString.Length == 5)
                 {
-                    toString += "<<";
+                    tempString += " ";
                 }
+                tempString += $" R: {rotorConnectionsReverse[i]}";
+
+                if (i == currentRotorPosition )
+                {
+                    tempString += " <<";
+                }
+                toString += tempString;
+
             }
 
             return toString;
