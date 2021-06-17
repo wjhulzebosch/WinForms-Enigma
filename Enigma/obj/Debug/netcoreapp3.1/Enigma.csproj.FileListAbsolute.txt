@@ -1,0 +1,15 @@
+c:\git\Enigma\Enigma\Enigma\bin\Debug\netcoreapp3.1\Enigma.exe
+c:\git\Enigma\Enigma\Enigma\bin\Debug\netcoreapp3.1\Enigma.deps.json
+c:\git\Enigma\Enigma\Enigma\bin\Debug\netcoreapp3.1\Enigma.runtimeconfig.json
+c:\git\Enigma\Enigma\Enigma\bin\Debug\netcoreapp3.1\Enigma.runtimeconfig.dev.json
+c:\git\Enigma\Enigma\Enigma\bin\Debug\netcoreapp3.1\Enigma.dll
+c:\git\Enigma\Enigma\Enigma\bin\Debug\netcoreapp3.1\Enigma.pdb
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.csprojAssemblyReference.cache
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.csproj.GenerateResource.cache
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.AssemblyInfoInputs.cache
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.AssemblyInfo.cs
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.csproj.CoreCompileInputs.cache
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.dll
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.pdb
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\Enigma.genruntimeconfig.cache
+c:\git\Enigma\Enigma\Enigma\obj\Debug\netcoreapp3.1\EnigmaForm.Form1.resources
