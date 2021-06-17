@@ -104,7 +104,7 @@ namespace Enigma
             rotorConnectionsReverse[numRotorConnections - 1] = tempInt;
 
 
-            Debug.WriteLine(this);
+            // Debug.WriteLine(this);
         }
 
         private void setupRotorButtons(Form form, int rotorNumber)

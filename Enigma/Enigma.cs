@@ -37,9 +37,10 @@ namespace Enigma
             {
                 return;
             }
+            listen = false;
 
             // Get the character that was pressed and make it upper case
-            char charPressed = char.ToUpper(e.KeyChar);
+            char charPressed = e.KeyChar;
             txbInput.Text += charPressed;
 
             // Get the encrypted value of the key that was pressed
@@ -57,6 +58,8 @@ namespace Enigma
                     currentlyLit = label;
                 }
             }
+
+            listen = true;
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -83,8 +86,10 @@ namespace Enigma
 
         private char EnigmaEncrypt(char c)
         {
+            c = char.ToUpper(c);
+            Debug.WriteLine(letterToNumber(c));
             int charNumber = letterToNumber(c);
-            if(charNumber<0 || charNumber >65 )
+            if(charNumber<0 || charNumber >25 )
             {
                 return NumberToLetter(33-65);
             }
@@ -215,8 +220,7 @@ namespace Enigma
             string output = "";
             foreach(char c in input)
             {
-                char upper = char.ToUpper(c);
-                output += EnigmaEncrypt(upper);
+                output += EnigmaEncrypt(c);
             }
 
             txbOutput.Text = output;

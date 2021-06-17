@@ -105,7 +105,7 @@
             this.btnDecodeInput.Name = "btnDecodeInput";
             this.btnDecodeInput.Size = new System.Drawing.Size(75, 32);
             this.btnDecodeInput.TabIndex = 10;
-            this.btnDecodeInput.Text = "Decode";
+            this.btnDecodeInput.Text = "Encode";
             this.btnDecodeInput.UseVisualStyleBackColor = true;
             this.btnDecodeInput.Click += new System.EventHandler(this.btnDecodeInput_Click);
             // 
