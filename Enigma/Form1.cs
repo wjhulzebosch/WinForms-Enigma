@@ -9,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EnigmaForm
+namespace Enigma
 {
-    public partial class Form1 : Form
+    public partial class EnigmaForm : Form
     {
         List<Label> labels = new List<Label>();
         Label currentlyLit;
@@ -19,7 +19,7 @@ namespace EnigmaForm
         Rotor rotor0;
         Rotor rotor1;
         Rotor rotor2;
-        public Form1()
+        public EnigmaForm()
         {
             InitializeComponent();
             SetupDisplay();
@@ -27,40 +27,24 @@ namespace EnigmaForm
             rotor0 = new Rotor(this, 0);
             rotor1 = new Rotor(this, 1);
             rotor2 = new Rotor(this, 2);
-
-            // AutomaticTest();
         }
 
-        void AutomaticTest()
-        {
-            List<String> testOutputList = new List<string>();
-            for (int rotor = 0; rotor < 2; rotor++)
-            {
-                for (int input = 0; input < rotor0.GetConnectionCount(); input++)
-                {
-                    rotor0.SetRotorPosition(rotor);
-                    char output = EnigmaEncrypt( NumberToLetter(input) );
-
-                    string testOutput = "Rotor " + rotor0.GetRotorPosition() + ": input " + input + " -> output " + output;
-                    Debug.WriteLine(testOutput);
-                    testOutputList.Add(testOutput);
-                }
-            }
-
-            Debug.WriteLine("----- Test output -----");
-            Debug.WriteLine(String.Join("\n", testOutputList));
-        }
+        bool listen = true;
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if(!listen)
+            {
+                return;
+            }
+
             // Get the character that was pressed and make it upper case
             char charPressed = char.ToUpper(e.KeyChar);
-            lblKeysPressed.Text += charPressed;
+            txbInput.Text += charPressed;
 
             // Get the encrypted value of the key that was pressed
             char lightUp = EnigmaEncrypt(charPressed);
-            lblKeysLitUp.Text += lightUp;
-
+            txbOutput.Text += lightUp;
 
             // Light up the char that belongs to the result of the encryption.
             // TODO: Right now, this works with a foreach, looping over all
@@ -86,37 +70,39 @@ namespace EnigmaForm
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            lblKeysPressed.Text = "Keys Pressed:";
-            lblKeysLitUp.Text = "Keys Lit Up:";
-            ResetRotors();
+            txbInput.Text = "";
+            txbOutput.Text = "";
         }
 
         void ResetRotors()
         {
-            rotor0.SetRotorPosition(0);
+            rotor0.ResetRotorPositions();
+            rotor1.ResetRotorPositions();
+            rotor2.ResetRotorPositions();
         }
 
         private char EnigmaEncrypt(char c)
         {
             int charNumber = letterToNumber(c);
+            if(charNumber<0 || charNumber >65 )
+            {
+                return NumberToLetter(33-65);
+            }
 
             int encryptedNumber = rotor0.KeyStroke(charNumber, false);
-            Debug.WriteLine("-----\r\nEncrypting...");
-            Debug.WriteLine($"rotor 1:        {charNumber} ({NumberToLetter(charNumber)}) becomes {encryptedNumber} ({NumberToLetter(encryptedNumber)}).");
+            // Debug.WriteLine("-----\r\nEncrypting...");
             encryptedNumber = rotor1.KeyStroke(encryptedNumber, false);
             encryptedNumber = rotor2.KeyStroke(encryptedNumber, false);
             int mirroredNumber = MirrorInput(encryptedNumber, rotor0.GetConnectionCount());
             
 
-            Debug.WriteLine("Mirroring:      " + encryptedNumber + " (" + NumberToLetter(encryptedNumber) + ") becomes " + mirroredNumber + " (" + NumberToLetter(mirroredNumber) + ").");
+            // Debug.WriteLine("Mirroring:      " + encryptedNumber + " (" + NumberToLetter(encryptedNumber) + ") becomes " + mirroredNumber + " (" + NumberToLetter(mirroredNumber) + ").");
 
             int mirroredEncryptedNumber = rotor2.KeyStroke(mirroredNumber, true);
             mirroredEncryptedNumber = rotor1.KeyStroke(mirroredEncryptedNumber, true);
             mirroredEncryptedNumber = rotor0.KeyStroke(mirroredEncryptedNumber, true);
-            Debug.WriteLine($"Rev. rotor 1:   {mirroredNumber} ({NumberToLetter(mirroredNumber)}) becomes {mirroredEncryptedNumber} ({NumberToLetter(mirroredEncryptedNumber)}).");
 
-
-            Debug.WriteLine("-----");
+            // Debug.WriteLine("-----");
 
             return NumberToLetter(mirroredEncryptedNumber);
         }
@@ -140,8 +126,8 @@ namespace EnigmaForm
 
         private void SetupDisplay()
         {
-            lblKeysPressed.Text = "Keys Pressed:";
-            lblKeysLitUp.Text = "Keys Lit Up:";
+            txbInput.Text = "";
+            txbOutput.Text = "";
 
             int currRow = 0;
             int xPos = 50;
@@ -196,179 +182,52 @@ namespace EnigmaForm
             int mirrored = (reflectorCount - 1) - input;
             return mirrored;
         }
-    }
 
-    class Rotor
-    {
-        private int currentRotorPosition;
-        private int[] rotorConnections = { 2, -1, 3, 1, 3, -2 };
-        // private int[] rotorConnections = { 17, 20, 17, 17, 11, 18, 7, 3, 8, 9, -3, 13, 2, -7, -2, -11, -8, -17, -9, -17, -17, -20, 3, -18, -13, -3 };
-
-        private int[] rotorConnectionsReverse = {1, -3, -2, 2, -1, -3};
-        // private int[] rotorConnectionsReverse = {};
-        
-        private int numRotorConnections;
-
-        Label myLabel;
-        int rotorNumber;
-
-        public Rotor()
+        private void btnOpenSettings_Click(object sender, EventArgs e)
         {
-
+            SettingsPanel settingsPanel = new SettingsPanel();
+            settingsPanel.Show();
         }
 
-        public Rotor(Form form, int rotorNumber)
+        private void btnCopyOutput_Click(object sender, EventArgs e)
         {
-            this.rotorNumber = rotorNumber;
-            setupRotorButtons(form, rotorNumber);
-            numRotorConnections = rotorConnections.Length;
+            string currentOutput = txbOutput.Text;
+            Clipboard.SetText(currentOutput);
         }
 
-        public override string ToString()
+        private void btnCopyInput_Click(object sender, EventArgs e)
         {
-            string tempString= "";
-            string toString = "";
-            for(int i = 0; i < numRotorConnections; i++)
+            string currentInput = txbInput.Text;
+            Clipboard.SetText(currentInput);
+        }
+
+        private void btnPasteInput_Click(object sender, EventArgs e)
+        {
+            string clipboard = Clipboard.GetText();
+            txbInput.Text = clipboard;
+        }
+
+        private void btnDecodeInput_Click(object sender, EventArgs e)
+        {
+            string input = txbInput.Text;
+            string output = "";
+            foreach(char c in input)
             {
-                tempString = $"\n{i}: {rotorConnections[i]}";
-                if (tempString.Length == 5)
-                {
-                    tempString += " ";
-                }
-                tempString += $" R: {rotorConnectionsReverse[i]}";
-
-                if (i == currentRotorPosition )
-                {
-                    // tempString += " <<";
-                }
-                toString += tempString;
-
+                char upper = char.ToUpper(c);
+                output += EnigmaEncrypt(upper);
             }
 
-            return toString;
+            txbOutput.Text = output;
         }
 
-        public int KeyStroke(int key, bool reverse)
+        private void stopListening(object sender, EventArgs e)
         {
-            int retVal;
-            if(!reverse)
-            {
-                IncreaseRotorPosition();
-                // Debug.WriteLine($"Key: {key} + connection {rotorConnections[currentRotorPosition]}");
-                retVal = (key + rotorConnections[key]) % numRotorConnections;
-            }
-            else
-            {
-                retVal = (key + rotorConnectionsReverse[key]) % numRotorConnections;
-            }
-
-            retVal += numRotorConnections;
-            retVal = retVal % numRotorConnections;
-            return retVal;
+            listen = false;
         }
 
-        public void UpdateRotorPositionLabel()
+        private void startListening(object sender, EventArgs e)
         {
-            myLabel.Text = ((char)(rotorConnections[currentRotorPosition] + 65)).ToString();
-        }
-
-        public void IncreaseRotorPosition()
-        {
-            currentRotorPosition++;
-            currentRotorPosition = currentRotorPosition % numRotorConnections;
-
-            // rotor connections, shift one place
-            // Get last element from array
-            int tempInt = rotorConnections[0];
-            for (int i = 0; i < numRotorConnections-1; i++)
-            {
-                rotorConnections[i] = rotorConnections[i + 1];
-            }
-            rotorConnections[numRotorConnections - 1] = tempInt;
-
-            tempInt = rotorConnectionsReverse[0];
-            for (int i = 0; i < numRotorConnections - 1; i++)
-            {
-                rotorConnectionsReverse[i] = rotorConnectionsReverse[i + 1];
-            }
-            rotorConnectionsReverse[numRotorConnections - 1] = tempInt;
-
-
-            Debug.WriteLine(this);
-        }
-
-        private void setupRotorButtons (Form form, int rotorNumber)
-        {
-            // 
-            // lblCurrentRotorPosition
-            // 
-            Label lblCurrentRotorPosition = new Label();
-            lblCurrentRotorPosition.AutoSize = true;
-            lblCurrentRotorPosition.Location = new System.Drawing.Point((315 - (rotorNumber * 80)), 9);
-            lblCurrentRotorPosition.Name = "lblCurrentRotorPosition";
-            lblCurrentRotorPosition.Size = new System.Drawing.Size(15, 15);
-            lblCurrentRotorPosition.TabIndex = 6;
-            lblCurrentRotorPosition.Text = "?";
-            form.Controls.Add(lblCurrentRotorPosition);
-            myLabel = lblCurrentRotorPosition;
-
-            // 
-            // btnIncreaseRotorPosition
-            // 
-            Button btnIncreaseRotorPosition = new Button();
-            btnIncreaseRotorPosition.Location = new System.Drawing.Point((310 - (rotorNumber * 80)), 28);
-            btnIncreaseRotorPosition.Name = "btnIncreaseRotorPosition";
-            btnIncreaseRotorPosition.Size = new System.Drawing.Size(25, 23);
-            btnIncreaseRotorPosition.TabIndex = 7;
-            btnIncreaseRotorPosition.Text = "v";
-            btnIncreaseRotorPosition.UseVisualStyleBackColor = true;
-            // Add clickEvent
-            // btnIncreaseRotorPosition.Click += new System.EventHandler(this.IncreaseRotorPosition);
-            form.Controls.Add(btnIncreaseRotorPosition);
-
-            // 
-            // btnChangeRotorLeft
-            // 
-            Button btnChangeRotorLeft = new Button();
-            btnChangeRotorLeft.Location = new System.Drawing.Point((288 - (rotorNumber * 80)), 5);
-            btnChangeRotorLeft.Name = "btnChangeRotorLeft";
-            btnChangeRotorLeft.Size = new System.Drawing.Size(25, 23);
-            btnChangeRotorLeft.TabIndex = 7;
-            btnChangeRotorLeft.Text = "<";
-            btnChangeRotorLeft.UseVisualStyleBackColor = true;
-            // Add clickEvent
-            // btnIncreaseRotorPosition.Click += new System.EventHandler();
-            form.Controls.Add(btnChangeRotorLeft);
-
-            // 
-            // btnChangeRotorRight
-            // 
-            Button btnChangeRotorRight = new Button();
-            btnChangeRotorRight.Location = new System.Drawing.Point((330 - (rotorNumber * 80)), 5);
-            btnChangeRotorRight.Name = "btnChangeRotorRight";
-            btnChangeRotorRight.Size = new System.Drawing.Size(25, 23);
-            btnChangeRotorRight.TabIndex = 7;
-            btnChangeRotorRight.Text = ">";
-            btnChangeRotorRight.UseVisualStyleBackColor = true;
-            // Add clickEvent
-            // btnIncreaseRotorPosition.Click += new System.EventHandler();
-            form.Controls.Add(btnChangeRotorRight);
-        }
-
-        public void SetRotorPosition(int position)
-        {
-            currentRotorPosition = position % numRotorConnections;
-            UpdateRotorPositionLabel();
-        }
-
-        public int GetRotorPosition()
-        {
-            return currentRotorPosition;
-        }
-
-        public int GetConnectionCount()
-        {
-            return numRotorConnections;
+            listen = true;
         }
     }
 }
