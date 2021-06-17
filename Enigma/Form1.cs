@@ -13,7 +13,6 @@ namespace EnigmaForm
 {
     public partial class Form1 : Form
     {
-        // char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
         List<Label> labels = new List<Label>();
         Label currentlyLit;
 
@@ -56,9 +55,12 @@ namespace EnigmaForm
         {
             // Get the character that was pressed and make it upper case
             char charPressed = char.ToUpper(e.KeyChar);
+            lblKeysPressed.Text += charPressed;
 
             // Get the encrypted value of the key that was pressed
             char lightUp = EnigmaEncrypt(charPressed);
+            lblKeysLitUp.Text += lightUp;
+
 
             // Light up the char that belongs to the result of the encryption.
             // TODO: Right now, this works with a foreach, looping over all
@@ -101,22 +103,22 @@ namespace EnigmaForm
             int encryptedNumber = rotor0.KeyStroke(charNumber, false);
             Debug.WriteLine("-----\r\nEncrypting...");
             Debug.WriteLine($"rotor 1:        {charNumber} ({NumberToLetter(charNumber)}) becomes {encryptedNumber} ({NumberToLetter(encryptedNumber)}).");
-            //encryptedNumber = rotor1.KeyStroke(encryptedNumber);
-            //encryptedNumber = rotor2.KeyStroke(encryptedNumber);
+            encryptedNumber = rotor1.KeyStroke(encryptedNumber, false);
+            encryptedNumber = rotor2.KeyStroke(encryptedNumber, false);
             int mirroredNumber = MirrorInput(encryptedNumber, rotor0.GetConnectionCount());
             
 
             Debug.WriteLine("Mirroring:      " + encryptedNumber + " (" + NumberToLetter(encryptedNumber) + ") becomes " + mirroredNumber + " (" + NumberToLetter(mirroredNumber) + ").");
 
-            //mirroredEncryptedNumber = rotor2.KeyStroke(mirroredEncryptedNumber, true);
-            //mirroredEncryptedNumber = rotor1.KeyStroke(mirroredEncryptedNumber, true);
-            int mirroreEncryptedNumber = rotor0.KeyStroke(mirroredNumber, true);
-            Debug.WriteLine($"Rev. rotor 1:   {mirroredNumber} ({NumberToLetter(mirroredNumber)}) becomes {mirroreEncryptedNumber} ({NumberToLetter(mirroreEncryptedNumber)}).");
+            int mirroredEncryptedNumber = rotor2.KeyStroke(mirroredNumber, true);
+            mirroredEncryptedNumber = rotor1.KeyStroke(mirroredEncryptedNumber, true);
+            mirroredEncryptedNumber = rotor0.KeyStroke(mirroredEncryptedNumber, true);
+            Debug.WriteLine($"Rev. rotor 1:   {mirroredNumber} ({NumberToLetter(mirroredNumber)}) becomes {mirroredEncryptedNumber} ({NumberToLetter(mirroredEncryptedNumber)}).");
 
 
             Debug.WriteLine("-----");
 
-            return NumberToLetter(mirroredNumber);
+            return NumberToLetter(mirroredEncryptedNumber);
         }
 
         static Label styleLabel(Label label)
@@ -181,18 +183,12 @@ namespace EnigmaForm
         static int letterToNumber(char c)
         {
             return Encoding.ASCII.GetBytes(new char[] { c })[0] - 65;
-
         }
 
         public static char NumberToLetter(int i)
         {
             return (char)(i + 65);
         }
-        //static int MirrorInput(int input)
-        //{
-        //    int[] mirrorConnections = Rotor.CharToIntArray("QYHOGNECVPUZTFDJAXWMKISRBL".ToCharArray());
-        //    return mirrorConnections[input];
-        //} 
 
         static int MirrorInput(int input, int numRotorConnections)
         {
@@ -206,7 +202,11 @@ namespace EnigmaForm
     {
         private int currentRotorPosition;
         private int[] rotorConnections = { 2, -1, 3, 1, 3, -2 };
+        // private int[] rotorConnections = { 17, 20, 17, 17, 11, 18, 7, 3, 8, 9, -3, 13, 2, -7, -2, -11, -8, -17, -9, -17, -17, -20, 3, -18, -13, -3 };
+
         private int[] rotorConnectionsReverse = {1, -3, -2, 2, -1, -3};
+        // private int[] rotorConnectionsReverse = {};
+        
         private int numRotorConnections;
 
         Label myLabel;
@@ -239,7 +239,7 @@ namespace EnigmaForm
 
                 if (i == currentRotorPosition )
                 {
-                    tempString += " <<";
+                    // tempString += " <<";
                 }
                 toString += tempString;
 
@@ -254,12 +254,12 @@ namespace EnigmaForm
             if(!reverse)
             {
                 IncreaseRotorPosition();
-                Debug.WriteLine($"Key: {key} + connection {rotorConnections[currentRotorPosition]}");
-                retVal = (key + rotorConnections[currentRotorPosition]) % numRotorConnections;
+                // Debug.WriteLine($"Key: {key} + connection {rotorConnections[currentRotorPosition]}");
+                retVal = (key + rotorConnections[key]) % numRotorConnections;
             }
             else
             {
-                retVal = (key + rotorConnectionsReverse[currentRotorPosition]) % numRotorConnections;
+                retVal = (key + rotorConnectionsReverse[key]) % numRotorConnections;
             }
 
             retVal += numRotorConnections;
@@ -276,6 +276,23 @@ namespace EnigmaForm
         {
             currentRotorPosition++;
             currentRotorPosition = currentRotorPosition % numRotorConnections;
+
+            // rotor connections, shift one place
+            // Get last element from array
+            int tempInt = rotorConnections[0];
+            for (int i = 0; i < numRotorConnections-1; i++)
+            {
+                rotorConnections[i] = rotorConnections[i + 1];
+            }
+            rotorConnections[numRotorConnections - 1] = tempInt;
+
+            tempInt = rotorConnectionsReverse[0];
+            for (int i = 0; i < numRotorConnections - 1; i++)
+            {
+                rotorConnectionsReverse[i] = rotorConnectionsReverse[i + 1];
+            }
+            rotorConnectionsReverse[numRotorConnections - 1] = tempInt;
+
 
             Debug.WriteLine(this);
         }
@@ -306,7 +323,7 @@ namespace EnigmaForm
             btnIncreaseRotorPosition.Text = "v";
             btnIncreaseRotorPosition.UseVisualStyleBackColor = true;
             // Add clickEvent
-            //btnIncreaseRotorPosition.Click += new System.EventHandler(this.IncreaseRotorPosition);
+            // btnIncreaseRotorPosition.Click += new System.EventHandler(this.IncreaseRotorPosition);
             form.Controls.Add(btnIncreaseRotorPosition);
 
             // 

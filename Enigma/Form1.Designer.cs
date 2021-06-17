@@ -28,45 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.lblKeysPressed = new System.Windows.Forms.Label();
             this.lblKeysLitUp = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(662, 235);
-            this.checkedListBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(9, 4);
-            this.checkedListBox1.TabIndex = 0;
-            // 
             // lblKeysPressed
             // 
             this.lblKeysPressed.AutoSize = true;
-            this.lblKeysPressed.Location = new System.Drawing.Point(14, 511);
+            this.lblKeysPressed.Location = new System.Drawing.Point(12, 383);
             this.lblKeysPressed.Name = "lblKeysPressed";
-            this.lblKeysPressed.Size = new System.Drawing.Size(96, 20);
+            this.lblKeysPressed.Size = new System.Drawing.Size(77, 15);
             this.lblKeysPressed.TabIndex = 3;
             this.lblKeysPressed.Text = "Keys Pressed:";
             // 
             // lblKeysLitUp
             // 
             this.lblKeysLitUp.AutoSize = true;
-            this.lblKeysLitUp.Location = new System.Drawing.Point(24, 533);
+            this.lblKeysLitUp.Location = new System.Drawing.Point(21, 400);
             this.lblKeysLitUp.Name = "lblKeysLitUp";
-            this.lblKeysLitUp.Size = new System.Drawing.Size(85, 20);
+            this.lblKeysLitUp.Size = new System.Drawing.Size(68, 15);
             this.lblKeysLitUp.TabIndex = 3;
             this.lblKeysLitUp.Text = "Keys Lit Up:";
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(807, 511);
-            this.btnClear.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnClear.Location = new System.Drawing.Point(706, 383);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(94, 43);
+            this.btnClear.Size = new System.Drawing.Size(82, 32);
             this.btnClear.TabIndex = 4;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -74,15 +63,13 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(914, 600);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.lblKeysLitUp);
             this.Controls.Add(this.lblKeysPressed);
-            this.Controls.Add(this.checkedListBox1);
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
@@ -93,8 +80,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Label lblKeysPressed;
         private System.Windows.Forms.Label lblKeysLitUp;
         private System.Windows.Forms.Button btnClear;
