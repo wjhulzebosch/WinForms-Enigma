@@ -19,14 +19,19 @@ namespace Enigma
         Rotor rotor0;
         Rotor rotor1;
         Rotor rotor2;
+
+        List<Rotor> rotors = new List<Rotor>();
         public EnigmaForm()
         {
             InitializeComponent();
             SetupDisplay();
 
             rotor0 = new Rotor(this, 0);
+            rotors.Add(rotor0);
             rotor1 = new Rotor(this, 1);
+            rotors.Add(rotor1);
             rotor2 = new Rotor(this, 2);
+            rotors.Add(rotor2);
         }
 
         bool listen = true;
@@ -75,13 +80,15 @@ namespace Enigma
         {
             txbInput.Text = "";
             txbOutput.Text = "";
+            ResetRotors();
         }
 
         void ResetRotors()
         {
-            rotor0.ResetRotorPositions();
-            rotor1.ResetRotorPositions();
-            rotor2.ResetRotorPositions();
+            foreach(Rotor rotor in rotors)
+            {
+                rotor.ResetRotor();
+            }
         }
 
         private char EnigmaEncrypt(char c)

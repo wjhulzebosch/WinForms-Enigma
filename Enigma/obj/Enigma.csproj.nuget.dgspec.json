@@ -1,18 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Git\\Enigma\\Enigma\\Enigma.csproj": {}
+    "C:\\git\\Enigma\\Enigma\\Enigma.csproj": {}
   },
   "projects": {
-    "C:\\Git\\Enigma\\Enigma\\Enigma.csproj": {
+    "C:\\git\\Enigma\\Enigma\\Enigma.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Git\\Enigma\\Enigma\\Enigma.csproj",
+        "projectUniqueName": "C:\\git\\Enigma\\Enigma\\Enigma.csproj",
         "projectName": "Enigma",
-        "projectPath": "C:\\Git\\Enigma\\Enigma\\Enigma.csproj",
+        "projectPath": "C:\\git\\Enigma\\Enigma\\Enigma.csproj",
         "packagesPath": "C:\\Users\\wjhul\\.nuget\\packages\\",
-        "outputPath": "C:\\Git\\Enigma\\Enigma\\obj\\",
+        "outputPath": "C:\\git\\Enigma\\Enigma\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
           "C:\\Users\\wjhul\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -26,6 +29,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +41,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "imports": [
             "net461",
             "net462",
@@ -55,7 +60,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

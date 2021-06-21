@@ -7,15 +7,17 @@ using System.Windows.Forms;
 namespace Enigma
 {    class Rotor
     {
-        int[] originalRotorConnections = { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
-        int[] originalRotorConnectionsReverse = { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
+        int[] originalRotorConnections = new int[26]; // { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
+        int[] originalRotorConnectionsReverse = new int[26]; // { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
+        int[] originalCharArray = new int[26]; // { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
 
         private int currentRotorPosition;
         //private int[] rotorConnections = { 2, -1, 3, 1, 3, -2 };
-        private int[] rotorConnections = { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
+        private int[] rotorConnections = new int[26]; // { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
+        private int[] charArray = new int[26]; // { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
 
         //private int[] rotorConnectionsReverse = {1, -3, -2, 2, -1, -3};
-        private int[] rotorConnectionsReverse = { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
+        private int[] rotorConnectionsReverse = new int[26]; //= { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
 
         private int numRotorConnections;
 
@@ -32,6 +34,16 @@ namespace Enigma
             this.rotorNumber = rotorNumber;
             setupRotorButtons(form, rotorNumber);
             numRotorConnections = rotorConnections.Length;
+
+            // Set the original arrays
+            originalRotorConnections = RotorSettings.GetRotorConnections(rotorNumber);
+            originalRotorConnectionsReverse = RotorSettings.GetReverseConnections(rotorNumber);
+            originalCharArray = RotorSettings.GetRotorChars(rotorNumber);
+
+            // Copy original arrays to the arrays we actually use
+            rotorConnections = (int[])originalRotorConnections.Clone();
+            rotorConnectionsReverse = (int[])originalRotorConnectionsReverse.Clone();
+            charArray = (int[])originalCharArray.Clone();
         }
 
         public override string ToString()
@@ -174,6 +186,14 @@ namespace Enigma
             }
         }
 
+        public void ResetRotor()
+        {
+            // Copy original arrays to the arrays we actually use
+            rotorConnections = (int[])originalRotorConnections.Clone();
+            rotorConnectionsReverse = (int[])originalRotorConnectionsReverse.Clone();
+            charArray = (int[])originalCharArray.Clone();
+        }
+
         public int GetConnectionCount()
         {
             return numRotorConnections;
@@ -213,6 +233,15 @@ namespace Enigma
             }
             Debug.WriteLine("");
             Debug.WriteLine("-----------");
+
+            // Create alphabetical rotorsettings
+            foreach (int setting in rotor)
+            {
+                Debug.Write($"{Helper.NumberToLetter(setting)}, ");
+                retVal += ($"{Helper.NumberToLetter(setting)}, ");
+            }
+            retVal = retVal.Remove(retVal.Length - 2);
+            retVal += "\r\n";
 
             // However, we _need_ the difference, because we want to use the numbers in the array as 
             // "the number we have to add to the connection, to get the connection on the other side".
