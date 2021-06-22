@@ -26,15 +26,6 @@ namespace Enigma
                 originalArray[i] = with;
             }
         }
-
-    }
-    public interface ICloneable<T>
-    {
-        T Clone();
-    }
-
-    public static class Extensions
-    {
         public static T[] Clone<T>(this T[] array) where T : ICloneable<T>
         {
             var newArray = new T[array.Length];
@@ -47,5 +38,10 @@ namespace Enigma
             foreach (var item in items)
                 yield return item.Clone();
         }
+
+    }
+    public interface ICloneable<T>
+    {
+        T Clone();
     }
 }

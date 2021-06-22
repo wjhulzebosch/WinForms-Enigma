@@ -7,29 +7,40 @@ using System.Windows.Forms;
 namespace Enigma
 {    class Rotor
     {
+        // Need to store the original rotor, so we can reset it
+        // so let's create some variables
         int[] originalRotorConnections = new int[26];
         int[] originalRotorConnectionsReverse = new int[26];
         int[] originalCharArray = new int[26];
 
+        // And for the actual rotor as well
         private int[] rotorConnections = new int[26];
         private int[] charArray = new int[26];
         private int[] rotorConnectionsReverse = new int[26]; //= { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
 
+        // Create var for the number of rotorConnections and the rotornumber
         private int numRotorConnections;
-
-        Label myLabel;
         int rotorNumber;
 
+        // Create a var to store the label attached to the rotor, so
+        // we can use it to update the label
+        Label myLabel;
+
+        // Empty constructor, doesn't get used
         public Rotor()
         {
 
         }
 
+        // Constructor
         public Rotor(Form form, int rotorNumber)
         {
+            // Set rotorNumber and numRotorConnections
             this.rotorNumber = rotorNumber;
-            setupRotorButtons(form, rotorNumber);
             numRotorConnections = rotorConnections.Length;
+
+            // Create the neccesary rotor buttons for this rotor
+            setupRotorButtons(form, rotorNumber);
 
             // Set the original arrays
             originalRotorConnections = RotorSettings.GetRotorConnections(rotorNumber);
@@ -42,6 +53,7 @@ namespace Enigma
             charArray = (int[])originalCharArray.Clone();
         }
 
+        // Override ToString, so we can easily debug our rotors if required
         public override string ToString()
         {
             string tempString = "";
@@ -61,7 +73,6 @@ namespace Enigma
 
             return toString;
         }
-
         public int KeyStroke(int key, bool reverse)
         {
             int retVal;
@@ -103,6 +114,7 @@ namespace Enigma
             // Debug.WriteLine(this);
         }
 
+        // This method creates the label and buttons for each rotor
         private void setupRotorButtons(Form form, int rotorNumber)
         {
             // 
@@ -161,15 +173,6 @@ namespace Enigma
             form.Controls.Add(btnChangeRotorRight);
         }
 
-        public void ResetRotorPositions()
-        {
-            for (int i = 0; i < numRotorConnections; i++)
-            {
-                rotorConnections[i] = originalRotorConnections[i];
-                rotorConnectionsReverse[i] = originalRotorConnectionsReverse[i];
-            }
-        }
-
         public void ResetRotor()
         {
             // Copy original arrays to the arrays we actually use
@@ -183,13 +186,20 @@ namespace Enigma
             return numRotorConnections;
         }
 
+        /// <summary>
+        ///  This method generates a new rotor.
+        /// </summary>
+        /// <returns></returns>
         public static string generateRotorConfig()
         {
+            // Create empty string we can later return
             string retVal = "";
 
+            // Set up the arrays for the rotorSettings
             int[] rotor = new int[26];
             int[] rotorReverse = new int[26];
 
+            // Fill the arrays with -1
             rotor.Fill(-1);
             rotorReverse.Fill(-1);
 
@@ -203,7 +213,7 @@ namespace Enigma
                 rotor[i] = nextEmptySpace;
                 rotorReverse[rotor[i]] = i;
             }
-
+            // Debug info
             Debug.WriteLine("-----CONNECTIONS------");
             foreach (int setting in rotor)
             {
@@ -227,7 +237,7 @@ namespace Enigma
             retVal = retVal.Remove(retVal.Length - 2);
             retVal += "\r\n";
 
-            // However, we _need_ the difference, because we want to use the numbers in the array as 
+            // We _need_ the difference, because we want to use the numbers in the array as 
             // "the number we have to add to the connection, to get the connection on the other side".
             for (int i = 0; i < rotor.Length; i++)
             {
