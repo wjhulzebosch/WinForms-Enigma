@@ -77,8 +77,8 @@ namespace Enigma
                 retVal[i] = Helper.letterToNumber(rotorChars[rotor, i]);
             }
 
-            return retVal;
             Debug.WriteLine($"Aantal elmnt in array: {retVal.Length}");
+            return retVal;           
         }
     }
 }

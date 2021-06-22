@@ -7,16 +7,12 @@ using System.Windows.Forms;
 namespace Enigma
 {    class Rotor
     {
-        int[] originalRotorConnections = new int[26]; // { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
-        int[] originalRotorConnectionsReverse = new int[26]; // { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
-        int[] originalCharArray = new int[26]; // { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
+        int[] originalRotorConnections = new int[26];
+        int[] originalRotorConnectionsReverse = new int[26];
+        int[] originalCharArray = new int[26];
 
-        private int currentRotorPosition;
-        //private int[] rotorConnections = { 2, -1, 3, 1, 3, -2 };
-        private int[] rotorConnections = new int[26]; // { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
-        private int[] charArray = new int[26]; // { 18, 21, 14, 22, 8, 3, 8, 2, 11, 14, -9, 6, 12, -9, -9, 6, -9, -4, -15, 1, -18, -6, -11, -13, -24, -19 };
-
-        //private int[] rotorConnectionsReverse = {1, -3, -2, 2, -1, -3};
+        private int[] rotorConnections = new int[26];
+        private int[] charArray = new int[26];
         private int[] rotorConnectionsReverse = new int[26]; //= { 24, 9, 18, 15, 9, 9, 19, 9, -3, -2, 13, 11, -8, 4, -8, 6, -14, -6, -18, -11, -1, -6, -21, -14, -12, -22 };
 
         private int numRotorConnections;
@@ -59,10 +55,6 @@ namespace Enigma
                 }
                 tempString += $" R: {rotorConnectionsReverse[i]}";
 
-                if (i == currentRotorPosition)
-                {
-                    // tempString += " <<";
-                }
                 toString += tempString;
 
             }
@@ -89,16 +81,8 @@ namespace Enigma
             return retVal;
         }
 
-        public void UpdateRotorPositionLabel()
-        {
-            myLabel.Text = ((char)(rotorConnections[currentRotorPosition] + 65)).ToString();
-        }
-
         public void IncreaseRotorPosition()
         {
-            currentRotorPosition++;
-            currentRotorPosition = currentRotorPosition % numRotorConnections;
-
             // rotor connections, shift one place
             // Get last element from array
             int tempInt = rotorConnections[0];
