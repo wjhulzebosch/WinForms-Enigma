@@ -84,7 +84,7 @@ namespace Enigma
             // Create a variable for the return value
             int retVal;
 
-            // Rotorposition shouldn't be reversed on the 'return'-trip trough the rotor
+            // Rotorposition shouldn't be increased on the 'return'-trip trough the rotor
             if (!reverse)
             {
                 IncreaseRotorPosition();
