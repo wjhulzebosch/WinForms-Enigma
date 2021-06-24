@@ -73,9 +73,18 @@ namespace Enigma
 
             return toString;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="reverse"></param>
+        /// <returns></returns>
         public int KeyStroke(int key, bool reverse)
         {
+            // Create a variable for the return value
             int retVal;
+
+            // Rotorposition shouldn't be reversed on the 'return'-trip trough the rotor
             if (!reverse)
             {
                 IncreaseRotorPosition();
@@ -87,6 +96,7 @@ namespace Enigma
                 retVal = (key + rotorConnectionsReverse[key]) % numRotorConnections;
             }
 
+            // Correct negative numbers and numbers > 25
             retVal += numRotorConnections;
             retVal = retVal % numRotorConnections;
             return retVal;
@@ -94,22 +104,27 @@ namespace Enigma
 
         public void IncreaseRotorPosition()
         {
-            // rotor connections, shift one place
-            // Get last element from array
+            // Temporary store first element from array
             int tempInt = rotorConnections[0];
+
+            // Shift all elements in the array with one
             for (int i = 0; i < numRotorConnections - 1; i++)
             {
                 rotorConnections[i] = rotorConnections[i + 1];
             }
+            // Set the last value of the array to the original first value
             rotorConnections[numRotorConnections - 1] = tempInt;
 
+            // Same, but for the reversed array
+            // Temporary store first element from array
             tempInt = rotorConnectionsReverse[0];
+            // Shift all elements in the array with one
             for (int i = 0; i < numRotorConnections - 1; i++)
             {
                 rotorConnectionsReverse[i] = rotorConnectionsReverse[i + 1];
             }
+            // Set the last value of the array to the original first value
             rotorConnectionsReverse[numRotorConnections - 1] = tempInt;
-
 
             // Debug.WriteLine(this);
         }
@@ -214,24 +229,24 @@ namespace Enigma
                 rotorReverse[rotor[i]] = i;
             }
             // Debug info
-            Debug.WriteLine("-----CONNECTIONS------");
+            // Debug.WriteLine("-----CONNECTIONS------");
             foreach (int setting in rotor)
             {
-                Debug.Write($"{setting}, ");
+                //Debug.Write($"{setting}, ");
             }
-            Debug.WriteLine("");
+            // Debug.WriteLine("");
 
             foreach (int setting in rotorReverse)
             {
-                Debug.Write($"{setting}, ");
+                //Debug.Write($"{setting}, ");
             }
-            Debug.WriteLine("");
-            Debug.WriteLine("-----------");
+            //Debug.WriteLine("");
+            //Debug.WriteLine("-----------");
 
             // Create alphabetical rotorsettings
             foreach (int setting in rotor)
             {
-                Debug.Write($"{Helper.NumberToLetter(setting)}, ");
+                //Debug.Write($"{Helper.NumberToLetter(setting)}, ");
                 retVal += ($"{Helper.NumberToLetter(setting)}, ");
             }
             retVal = retVal.Remove(retVal.Length - 2);
@@ -247,23 +262,23 @@ namespace Enigma
                 rotorReverse[i] = rotorReverse[i] - i;
             }
 
-            Debug.WriteLine("-----DIFFERENCES------");
+            //Debug.WriteLine("-----DIFFERENCES------");
             foreach (int setting in rotor)
             {
-                Debug.Write($"{setting}, ");
+                //Debug.Write($"{setting}, ");
                 retVal+=($"{setting}, ");
             }
-            Debug.WriteLine("");
+            //Debug.WriteLine("");
             retVal = retVal.Remove(retVal.Length - 2);
             retVal += "\r\n";
             foreach (int setting in rotorReverse)
             {
-                Debug.Write($"{setting}, ");
+                //Debug.Write($"{setting}, ");
                 retVal += ($"{setting}, ");
             }
             retVal = retVal.Remove(retVal.Length - 2);
-            Debug.WriteLine("");
-            Debug.WriteLine("-----------");
+            //Debug.WriteLine("");
+            //Debug.WriteLine("-----------");
 
             return retVal;
         }

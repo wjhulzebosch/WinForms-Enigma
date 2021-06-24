@@ -126,7 +126,7 @@ namespace Enigma
         {
             // Alles naar hoofdletters
             c = char.ToUpper(c);
-            Debug.WriteLine(Helper.letterToNumber(c));
+            // Debug.WriteLine(Helper.letterToNumber(c));
 
             // Vertall naar getallen
             int charNumber = Helper.letterToNumber(c);
